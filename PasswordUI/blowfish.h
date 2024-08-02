@@ -1,10 +1,8 @@
 #pragma once
 
-#include <iostream>
-#include <array>
-#include <cstdint>
 #include <array>
 #include <string>
+
 
 //P array
 const std::array<uint32_t, 18> P = {
@@ -231,6 +229,7 @@ const std::array<std::array<uint32_t, 256>, 4> S = {
 
 class Blowfish {
 private:
+    bool key_added = false;
     //rounds for encryption, decryption
     const size_t rounds = 16;
     //for subkeys
@@ -238,13 +237,19 @@ private:
     //substitution boxes
     std::array<std::array<uint32_t, 256>, 4> S_boxes;
     
-    void Initialise(std::string&);
-	uint32_t f_function(uint32_t);
+    void Initialise(std::string& key);
+	uint32_t f_function(uint32_t x);
+
+    std::string uint_to_string(uint32_t);
 
 public:
     Blowfish();
-    Blowfish(std::string&);
+    
+    void AddKey(std::string& key);
 
-    void Encrypt(uint32_t&, uint32_t&);
-    void Decrypt(uint32_t&, uint32_t&);
+    void Encrypt(uint32_t& left, uint32_t& right);
+    void Decrypt(uint32_t& left, uint32_t& right);
+
+    std::string EncryptPlaintext(Blowfish& blowfish, std::string plaintext);
+    std::string DecryptCiphertext(Blowfish& blowfish, std::string ciphertext);
 };

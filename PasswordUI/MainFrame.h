@@ -2,7 +2,7 @@
 
 #include <wx\wx.h>
 #include "initials.h"
-#include <memory>
+#include "blowfish.h"
 
 extern int WIDTH;
 extern int HEIGHT;
@@ -15,18 +15,23 @@ private:
 	wxTextCtrl* username;
 	wxTextCtrl* password;
 	wxTextCtrl* filename;
-	wxStaticText* helptext;
+	wxStaticText* file_helptext;
 	wxButton* button;
+	wxTextCtrl* custom_key;
+	wxStaticText* key_helptext;
 
-	//std::shared_ptr<Initials> initials;
+
+	Blowfish blowfish;
+
 private:
 	void CreateConsol();
 	void BindControls();
-	void OnSaveButtonClicked(const wxCommandEvent&);
+	void OnSaveButtonClicked(const wxCommandEvent& evt);
 	void SaveCurrent();
+
 public:
-	MainFrame(const std::string&);
+	MainFrame(const std::string& title);
 	
-	const void LogMessage(std::string&);
-	const void LogStatus(std::string&);
+	const void LogMessage(std::string& message);
+	const void LogStatus(std::string& status);
 };
