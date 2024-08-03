@@ -71,20 +71,18 @@ void MainFrame::OnSaveButtonClicked(const wxCommandEvent& evt)
 }
 
 void MainFrame::SaveCurrent()
-{
+{	
+	std::string web((username->GetValue()).mb_str());
+	std::string pass((password->GetValue()).mb_str());
+	std::string fname((filename->GetValue()).mb_str());
+
 	std::string key((custom_key->GetValue()).mb_str());
 
 	if (key.length() > 6)
 	{
-		if (!blowfish_already_initialised)
-		{
-			blowfish.AddKey(key);
-			blowfish_already_initialised = true;
-		}
-		std::string web((username->GetValue()).mb_str());
-		std::string pass((password->GetValue()).mb_str());
-		std::string fname((filename->GetValue()).mb_str());
-
+		blowfish.Reset();
+		blowfish.AddKey(key);
+				
 		std::string web_encrypted = blowfish.EncryptPlaintext(web);
 		std::string pass_encrypted = blowfish.EncryptPlaintext(pass);
 
@@ -123,17 +121,14 @@ std::string MainFrame::DecryptMyFile(std::string& filepath, std::string& key)
 {
 	std::string to_return = "";
 
-	std::ifstream file;
-	file.open(filepath, std::fstream::in);
-
 	if (key.length() < 6)
 		return "Invalid decryption key, it must be at least 6 characters.";
 
-	if (!blowfish_already_initialised)
-	{
-		blowfish.AddKey(key);
-		blowfish_already_initialised = true;
-	}
+	blowfish.Reset();
+	blowfish.AddKey(key);
+	
+	std::ifstream file;
+	file.open(filepath, std::fstream::in);
 
 	if (file.is_open())
 	{

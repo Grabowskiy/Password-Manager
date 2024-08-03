@@ -27,7 +27,6 @@ private:
 	wxButton* decrypt_button;
 
 	Blowfish blowfish;
-	bool blowfish_already_initialised = false;
 
 private:
 	void CreateConsol();

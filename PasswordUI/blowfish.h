@@ -236,15 +236,15 @@ private:
     std::array<uint32_t, 18> P_array;
     //substitution boxes
     std::array<std::array<uint32_t, 256>, 4> S_boxes;
-    
+
     void Initialise(std::string& key);
-	uint32_t f_function(uint32_t x);
+    uint32_t f_function(uint32_t x);
 
     std::string uint_to_string(uint32_t);
 
 public:
     Blowfish();
-    
+
     void AddKey(std::string& key);
 
     void Encrypt(uint32_t& left, uint32_t& right);
@@ -252,4 +252,6 @@ public:
 
     std::string EncryptPlaintext(std::string plaintext);
     std::string DecryptCiphertext(std::string ciphertext);
+
+    void Reset();
 };

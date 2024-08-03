@@ -156,3 +156,10 @@ std::string Blowfish::DecryptCiphertext(std::string ciphertext)
 		return "Error: no key added";
 	}
 }
+
+void Blowfish::Reset()
+{
+	P_array = {};
+	S_boxes = {};
+	key_added = false;
+}
