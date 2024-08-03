@@ -39,15 +39,17 @@ void Initials::SetPath(std::string new_filename) {
 std::string Initials::WriteToFile() {
 
 	const bool valid = Initials::CheckFilenameValidity(filename);
-	if (valid) {
+	if (valid) 
+	{
 		file.open(filename, std::fstream::out | std::fstream::app);
-		if (file.is_open()) {
+		if (file.is_open()) 
+		{
 			file << website << std::endl;
 			file << password << std::endl;
-			file << filename << std::endl;
+			file << "------------" << std::endl;
 
 			file.close();
-			message = "Initials written to the file successfully.";
+			message = "Encrypted data written to the file successfully.";
 		}
 		else
 			message = "Failed to open initials file.";

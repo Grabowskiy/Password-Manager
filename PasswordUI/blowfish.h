@@ -250,6 +250,6 @@ public:
     void Encrypt(uint32_t& left, uint32_t& right);
     void Decrypt(uint32_t& left, uint32_t& right);
 
-    std::string EncryptPlaintext(Blowfish& blowfish, std::string plaintext);
-    std::string DecryptCiphertext(Blowfish& blowfish, std::string ciphertext);
+    std::string EncryptPlaintext(std::string plaintext);
+    std::string DecryptCiphertext(std::string ciphertext);
 };

@@ -11,9 +11,6 @@ private:
 	std::string filename = "initials.txt";
 	std::ofstream file;
 	std::string message;
-private:
-	const bool CheckFilenameValidity(std::string& name);
-
 public:
 	Initials();
 
@@ -32,6 +29,8 @@ public:
 	void SetPassword(std::string new_password);
 
 	void SetPath(std::string new_filename);
+
+	const bool CheckFilenameValidity(std::string& name);
 
 	std::string WriteToFile();
 };

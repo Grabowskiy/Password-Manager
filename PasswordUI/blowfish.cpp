@@ -5,7 +5,7 @@
 Blowfish::Blowfish() {}
 
 void Blowfish::AddKey(std::string& key)
-{
+{	
 	Blowfish::Initialise(key);
 	key_added = true;
 }
@@ -92,7 +92,7 @@ std::string Blowfish::uint_to_string(uint32_t sh)
 	return str;
 }
 
-std::string Blowfish::EncryptPlaintext(Blowfish& blowfish, std::string plaintext)
+std::string Blowfish::EncryptPlaintext(std::string plaintext)
 {
 	if (key_added)
 	{
@@ -103,7 +103,7 @@ std::string Blowfish::EncryptPlaintext(Blowfish& blowfish, std::string plaintext
 		size_t pad = ((len > j * 2) ? (((len / j * 2) + 1) * j * 2 - len) : (j * 2 - len));
 		plaintext.append(pad, '\0');
 		len = plaintext.length();
-
+		
 		std::cout << "My message is: " << plaintext << std::endl;
 
 		uint32_t lt, rt;
@@ -113,7 +113,7 @@ std::string Blowfish::EncryptPlaintext(Blowfish& blowfish, std::string plaintext
 			rt = 0;
 			lt = *reinterpret_cast<unsigned int*>(const_cast<char*>(plaintext.substr(i, j).c_str()));
 			rt = *reinterpret_cast<unsigned int*>(const_cast<char*>(plaintext.substr(i + 4, j).c_str()));
-			blowfish.Blowfish::Encrypt(lt, rt);
+			this->Blowfish::Encrypt(lt, rt);
 			ciphertext += Blowfish::uint_to_string(lt) + Blowfish::uint_to_string(rt);
 		}
 
@@ -128,7 +128,7 @@ std::string Blowfish::EncryptPlaintext(Blowfish& blowfish, std::string plaintext
 	
 }
 
-std::string Blowfish::DecryptCiphertext(Blowfish& blowfish, std::string ciphertext)
+std::string Blowfish::DecryptCiphertext(std::string ciphertext)
 {
 	if (key_added) 
 	{
@@ -143,7 +143,7 @@ std::string Blowfish::DecryptCiphertext(Blowfish& blowfish, std::string cipherte
 			rt = 0;
 			lt = *reinterpret_cast<unsigned int*>(const_cast<char*>(ciphertext.substr(i, 4).c_str()));
 			rt = *reinterpret_cast<unsigned int*>(const_cast<char*>(ciphertext.substr(i + 4, 4).c_str()));
-			blowfish.Blowfish::Decrypt(lt, rt);
+			this->Blowfish::Decrypt(lt, rt);
 			plaintext += Blowfish::uint_to_string(lt) + Blowfish::uint_to_string(rt);
 		}
 
