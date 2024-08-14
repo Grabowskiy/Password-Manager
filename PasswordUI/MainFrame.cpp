@@ -107,23 +107,23 @@ void MainFrame::OnDecryptButtonClicked(const wxCommandEvent& evt)
 
 	if ((fname.substr(fname.size() - 4, fname.size())) == ".txt")
 	{
-		message = DecryptMyFile(fname, d_key);
+		DecryptMyFile(fname, d_key, message);
 	}
 	else
 	{
 		message = "Invalid file, must end with '.txt'.";
 	}
 	
-	LogMessage(message);
+	LogDecryptInfo(message);
 }
 
-std::string MainFrame::DecryptMyFile(std::string& filepath, std::string& key)
+void MainFrame::DecryptMyFile(std::string& filepath, std::string& key, std::string& message)
 {
-	std::string to_return = "";
-
 	if (key.length() < 6)
-		return "Invalid decryption key, it must be at least 6 characters.";
-
+	{
+		message = "Invalid decryption key, it must be at least 6 characters.";
+		return;
+	}
 	blowfish.Reset();
 	blowfish.AddKey(key);
 	
@@ -138,20 +138,26 @@ std::string MainFrame::DecryptMyFile(std::string& filepath, std::string& key)
 			if (row != "------------")
 			{
 				std::string decrypted_row = blowfish.DecryptCiphertext(row);
-				to_return.append(decrypted_row + "\n");
+				
+				char last_element = decrypted_row.back();
+				while (last_element == '\0')
+				{
+					decrypted_row.pop_back();
+					last_element = decrypted_row.back();
+				}
+				
+				message.append(decrypted_row + "\n");
 			}
 			else
-				to_return.append("------------\n");
+			{
+				message.append("------------\n");
+			}
 		}
 		file.close();
-		std::ofstream file_out;
-		file_out.open(filepath, std::ofstream::out | std::ofstream::app);
-		file_out << to_return << std::endl;
-		file_out.close();
-		return to_return;
 	}
 	else
-		return "Could not open file.";
+		message = "Could not open file.";
+	return;
 }
 
 const void MainFrame::LogMessage(std::string& message) 
@@ -164,4 +170,9 @@ const void MainFrame::LogMessage(std::string& message)
 const void MainFrame::LogStatus(std::string& status)
 {
 	wxLogStatus(wxString::FromUTF8(status));
+}
+
+const void MainFrame::LogDecryptInfo(std::string& message)
+{	
+	wxMessageBox(wxString::FromUTF8(message), "Decrypted infos", wxOK | wxICON_INFORMATION, this);
 }

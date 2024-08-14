@@ -40,6 +40,7 @@ public:
 	
 	const void LogMessage(std::string& message);
 	const void LogStatus(std::string& status);
+	const void LogDecryptInfo(std::string& message);
 
-	std::string DecryptMyFile(std::string& filepath, std::string& key);
+	void DecryptMyFile(std::string& filepath, std::string& key, std::string& message);
 };
