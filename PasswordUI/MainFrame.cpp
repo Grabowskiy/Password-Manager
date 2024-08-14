@@ -2,6 +2,7 @@
 #include <wx\wx.h>
 #include <memory>
 #include "blowfish.h"
+#include "PasswordGenerator.h"
 
 
 int WIDTH = 600;
@@ -56,14 +57,36 @@ void MainFrame::CreateConsol()
 	dkey_helptext->SetForegroundColour(wxColour(100, 100, 100));
 	
 	decrypt_button = new wxButton(panel, wxID_ANY, "DECRYPT", wxPoint(351, 200), wxSize(120, 40));
+
+	length_slider = new wxSlider(panel, wxID_ANY, 10, 8, 30, wxPoint(311, 300), wxSize(200, -1), wxSL_VALUE_LABEL);
+	generate_button = new wxButton(panel, wxID_ANY, "GENERATE", wxPoint(341, 365), wxSize(140, 40));
+	generated_password = new wxTextCtrl(panel, wxID_ANY, "", wxPoint(286, 425), wxSize(250, -1), wxTE_READONLY);
+	generated_password->SetFont(mainFont);
+	generated_password->SetBackgroundColour(*wxLIGHT_GREY);
 }
 
 void MainFrame::BindControls()
 {
 	save_button->Bind(wxEVT_BUTTON, &MainFrame::OnSaveButtonClicked, this);
 	decrypt_button->Bind(wxEVT_BUTTON, &MainFrame::OnDecryptButtonClicked, this);
+	generate_button->Bind(wxEVT_BUTTON, &MainFrame::OnGenerateButtonClicked, this);
 }
 
+const void MainFrame::LogMessage(std::string& message)
+{
+	wxLogMessage(wxString::FromUTF8(message));
+	LogStatus(message);
+}
+
+const void MainFrame::LogStatus(std::string& status)
+{
+	wxLogStatus(wxString::FromUTF8(status));
+}
+
+const void MainFrame::LogDecryptInfo(std::string& message)
+{
+	wxMessageBox(wxString::FromUTF8(message), "Decrypted infos", wxOK | wxICON_INFORMATION, this);
+}
 
 void MainFrame::OnSaveButtonClicked(const wxCommandEvent& evt) 
 {
@@ -160,19 +183,9 @@ void MainFrame::DecryptMyFile(std::string& filepath, std::string& key, std::stri
 	return;
 }
 
-const void MainFrame::LogMessage(std::string& message) 
+void MainFrame::OnGenerateButtonClicked(const wxCommandEvent& evt)
 {
-	wxLogMessage(wxString::FromUTF8(message));
-	LogStatus(message);
-}
-
-
-const void MainFrame::LogStatus(std::string& status)
-{
-	wxLogStatus(wxString::FromUTF8(status));
-}
-
-const void MainFrame::LogDecryptInfo(std::string& message)
-{	
-	wxMessageBox(wxString::FromUTF8(message), "Decrypted infos", wxOK | wxICON_INFORMATION, this);
+	const size_t length = length_slider->GetValue();
+	std::string generated = PasswordGenerator::Generate(length);
+	generated_password->SetLabel(wxString::FromUTF8(generated));
 }

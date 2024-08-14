@@ -28,11 +28,16 @@ private:
 
 	Blowfish blowfish;
 
+	wxSlider* length_slider;
+	wxButton* generate_button;
+	wxTextCtrl* generated_password;
+
 private:
 	void CreateConsol();
 	void BindControls();
 	void OnSaveButtonClicked(const wxCommandEvent& evt);
 	void OnDecryptButtonClicked(const wxCommandEvent& evt);
+	void OnGenerateButtonClicked(const wxCommandEvent& evt);
 	void SaveCurrent();
 
 public:
